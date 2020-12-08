@@ -7,16 +7,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import br.com.mendes.kostenorganisator.R;
 import br.com.mendes.kostenorganisator.fragments.CardFragment;
-import br.com.mendes.kostenorganisator.models.Cards;
+import br.com.mendes.kostenorganisator.models.Card;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<CardFragment> {
-    private ArrayList<Cards> cartoes;
+    private ArrayList<Card> cartoes;
 
-    public RecyclerAdapter(ArrayList<Cards> cartoes) {
+    public RecyclerAdapter(ArrayList<Card> cartoes) {
         this.cartoes = cartoes;
     }
 
@@ -29,8 +28,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<CardFragment> {
     @Override
     public void onBindViewHolder(@NonNull CardFragment holder, int position) {
         holder.txt_titulo.setText(cartoes.get(position).getTitulo());
-        holder.txt_secundario.setText(cartoes.get(position).getCorpo());
-        holder.texto.setText(cartoes.get(position).getDescricao());
+
+
+
     }
 
     @Override
