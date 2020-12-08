@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "414213794371",
+    "project_id": "kostenorganisator",
+    "storage_bucket": "kostenorganisator.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:414213794371:android:328519a610a6ca1c51c2f6",
+        "android_client_info": {
+          "package_name": "br.com.mendes.kostenorganisator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "414213794371-oje9p76c01ekeb8vulouf8bm7pt1u6ed.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.mendes.kostenorganisator",
+            "certificate_hash": "99c40a4bbb7d6b045058a41d7f1979755d2d4479"
+          }
+        },
+        {
+          "client_id": "414213794371-42jvb286bi1kpaht08gtk8e3f6tv0n3a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdG2ywxnA6mpwmc478TfKVa_3dQsYyTbU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "414213794371-42jvb286bi1kpaht08gtk8e3f6tv0n3a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
