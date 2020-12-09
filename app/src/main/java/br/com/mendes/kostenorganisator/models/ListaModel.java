@@ -1,23 +1,20 @@
 package br.com.mendes.kostenorganisator.models;
 
+import com.google.firebase.database.Exclude;
+
+import java.io.Serializable;
 import java.util.List;
 
-public class ListaModel {
-    private List<AtividadeModel> atividades;
+public class ListaModel implements Serializable {
     private String nomeLista;
     private String idLista;
+    private String key;
 
 
 
-    public ListaModel(String idLista, String nomeLista, List<AtividadeModel> atividades) {
+    public ListaModel(String idLista, String nomeLista) {
         this.idLista = idLista;
         this.nomeLista = nomeLista;
-        this.atividades = atividades;
-    }
-
-    public ListaModel(String nomeLista,List<AtividadeModel> atividades) {
-        this.nomeLista = nomeLista;
-        this.atividades = atividades;
     }
 
     public ListaModel(String nomeLista) {
@@ -43,11 +40,8 @@ public class ListaModel {
         this.nomeLista = nomeLista;
     }
 
-    public List<AtividadeModel> getAtividades() {
-        return atividades;
-    }
-
-    public void setAtividades(List<AtividadeModel> atividades) {
-        this.atividades = atividades;
+    @Override
+    public String toString() {
+        return getNomeLista();
     }
 }

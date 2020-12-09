@@ -6,6 +6,7 @@ import br.com.mendes.kostenorganisator.models.CategoriaModel;
 public interface ConfigDB {
     public final String DBNAME = "kostenorganisator";
     public final String ATIVIDADESTABLE = "atividades";
+    public final String LISTASTABLE = "listas";
     public final String CATEGORIASTABLE = "categorias";
 
     public final int CREATE_OP = 0;

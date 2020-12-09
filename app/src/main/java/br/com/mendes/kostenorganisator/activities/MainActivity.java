@@ -6,6 +6,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,15 +33,20 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import br.com.mendes.kostenorganisator.DAO.AtividadesDAO;
 import br.com.mendes.kostenorganisator.DAO.ListasDAO;
 import br.com.mendes.kostenorganisator.R;
 import br.com.mendes.kostenorganisator.adapters.TabsAdapter;
+import br.com.mendes.kostenorganisator.config.ConfigDB;
 import br.com.mendes.kostenorganisator.fragments.ConstructorFragment;
 import br.com.mendes.kostenorganisator.models.AtividadeModel;
 import br.com.mendes.kostenorganisator.models.CategoriaModel;
 import br.com.mendes.kostenorganisator.models.ListaModel;
+import br.com.mendes.kostenorganisator.models.Utils;
 
 public class MainActivity extends AppCompatActivity {
     private FloatingActionButton fab;
@@ -49,18 +55,21 @@ public class MainActivity extends AppCompatActivity {
     private boolean isPanelShown,isFabOpen;
     private Spinner categoriaDropDown;
     private Button btn_fecharAtv,btn_fecharList,btn_salvarLista,btn_salvarAtividade;
-    private EditText tituloLista,tituloAtividade;
+    private EditText tituloLista,tituloAtividade,valorAtividade;
     private List<ListaModel> listas;
     private TabsAdapter adapter;
     private ViewPager viewPager;
     private TabLayout tabLayout;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
-
+    private ListasDAO listasDAO = new ListasDAO();
+    private AtividadesDAO atividadesDAO = new AtividadesDAO();
+    private boolean resumoOpen;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         listas = new ArrayList<>();
 
         btn_fecharAtv = findViewById(R.id.btn_fecharatividade);
@@ -70,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
         tituloAtividade = findViewById(R.id.tituloAtv);
         tituloLista = findViewById(R.id.tituloLista);
+        valorAtividade = findViewById(R.id.valorAtv);
 
         fab_atividade = findViewById(R.id.fab_atividade);
         fab = findViewById(R.id.fab_menu);
@@ -77,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager = findViewById(R.id.viewPager);
         tabLayout = findViewById(R.id.tabLayout);
-
 
         hiddenPanelLista = (ViewGroup)findViewById(R.id.hidden_panel_lista);
         hiddenPanelAtv = (ViewGroup)findViewById(R.id.hidden_panel_atividade);
@@ -137,18 +146,27 @@ public class MainActivity extends AppCompatActivity {
         btn_salvarLista.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String titulo = tituloLista.getText().toString();
+                addLista(v);
+            }
+        });
 
-                ListaModel listaNew = new ListaModel(titulo);
-                listaNew = new ListasDAO().create(listaNew);
-                slideUpDown(hiddenPanelLista);
-                Snackbar.make(v,"Lista Criada, Nome: "+listaNew.getNomeLista()+" ID: "+listaNew.getIdLista(), Snackbar.LENGTH_LONG).show();
-
+        btn_salvarAtividade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addAtividade(v);
+                Utils.fecharTeclado(MainActivity.this);
+                slideUpDown(hiddenPanelAtv);
             }
         });
 
         ArrayList<CategoriaModel> entries = new ArrayList<>();
         categoriaDropDown = findViewById(R.id.spinner_categ);
+
+
+        //Criação de abas
+
+
+
 
         /*
         * Spinner spinner = (Spinner) findViewById(R.id.spinner_categorias);
@@ -164,78 +182,77 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-
-        //Criação das Abas
-
- /*
-        List<ListaModel> listas = new ListasDAO().getAll(MainActivity.this);
-        if(listas != null){
-            for(ListaModel lista : listas){
-                Nomes.add(lista.getNomeLista());
-                adapter.add(ConstructorFragment.newInstance("Listas"),lista.getNomeLista());
-                Snackbar.make(findViewById(android.R.id.content),"Lista Nome: "+lista.getNomeLista(), Snackbar.LENGTH_LONG).show();
-            }
-        }else{
-
-        }*/
-
-       // Log.v("DEBUG LISTa",Nomes.toString());
-        //Log.v("DEBUG LISTA",Integer.toString(listas.size()));
-
     }
+
+
 
     @Override
     protected void onStart() {
-        inicializarFireBase();
-        adapter = new TabsAdapter(getSupportFragmentManager(),1);
-        viewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(viewPager);
-        adapter.add(ConstructorFragment.newInstance("Resumo"),"Resumo");
-        adapter.add(ConstructorFragment.newInstance("Listas"),"Nome da Lista");
 
+        listasDAO.obterListas(getSupportFragmentManager(),viewPager,tabLayout);
+        atividadesDAO.obterAtividades();
 
-
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                listas.clear();
-
-                for( DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
-                    ListaModel l = dataSnapshot1.getValue(ListaModel.class);
-                    listas.add(l);
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                String nomepag = tabLayout.getTabAt(position).getText().toString();
+                if(nomepag == "Resumo"){
+                    resumoOpen = true;
+                    fab_atividade.setEnabled(false);
+                }else{
+                    resumoOpen = false;
+                    fab_atividade.setEnabled(true);
                 }
-
-
-                Log.v("DEBUG TAMANHO DB ",Integer.toString(listas.size()));
+                if(isPanelShown){
+                    DownAll(hiddenPanelLista,hiddenPanelAtv);
+                }
             }
+
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onPageSelected(int position) {
 
             }
 
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
         });
-
-
-
-
-
-        Log.v("DEBUG TAMANHsadO DB ",Integer.toString(adapter.getCount()));
-
-
+        atividadesDAO.obterAtividades();
         super.onStart();
     }
 
-    public void inicializarFireBase(){
-        FirebaseApp.initializeApp(MainActivity.this);
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        firebaseDatabase.setPersistenceEnabled(true);
-        databaseReference = firebaseDatabase.getReference("Listas");
-    }
+    private void addAtividade(View v) {
+        String titulo = tituloAtividade.getText().toString();
+        int indexLista = viewPager.getCurrentItem()-1;
+        String idLista = ListasDAO.DataCache.get(indexLista).getIdLista();
+        float valor = Float.parseFloat(valorAtividade.getText().toString());
+        String categoria = categoriaDropDown.getSelectedItem().toString();
+        CategoriaModel categ;
+        switch (categoria){
+            case "Alimentação":
+                categ = ConfigDB.alimentacao;
+                break;
+            case "Compras":
+                categ = ConfigDB.compras;
+                break;
+            default:
+                categ = ConfigDB.mobilidade;
+                break;
+        }
 
+        AtividadeModel newAtividade = new AtividadeModel(idLista,titulo, "09/12",valor,categ);
+        atividadesDAO.Create(newAtividade);
+
+    }
+    public void addLista(View v){
+        String titulo = tituloLista.getText().toString();
+
+        ListaModel listaNew = new ListaModel(titulo);
+        listaNew = new ListasDAO().create(listaNew);
+        slideUpDown(hiddenPanelLista);
+        Utils.show(v,"Lista adicionada com sucesso");
+    }
     public void slideUpDown(ViewGroup v) {
         hiddenPanel = v;
         if(!isPanelShown) {
@@ -258,6 +275,22 @@ public class MainActivity extends AppCompatActivity {
             isPanelShown = false;
         }
     }
+    public void DownAll(ViewGroup v, ViewGroup v1){
+        Animation bottomDown = AnimationUtils.loadAnimation(this,
+                R.anim.bottom_down);
+        fab.show();
+        if(v.getVisibility() == View.VISIBLE){
+            v.startAnimation(bottomDown);
+            v.setVisibility(View.INVISIBLE);
+        }
+        if(v1.getVisibility() == View.VISIBLE){
+            v1.startAnimation(bottomDown);
+            v1.setVisibility(View.INVISIBLE);
+        }
+
+        Utils.fecharTeclado(MainActivity.this);
+        isPanelShown = false;
+    }
     public void animarFabs(){
         //Animação das fabs
 
@@ -270,7 +303,9 @@ public class MainActivity extends AppCompatActivity {
             //adiciona a rotaçõa e isFabOpen
             rotacao = 225;
             isFabOpen = true;
+            if(!resumoOpen)
             fab_atividade.setEnabled(true);
+
             fab_lista.setEnabled(true);
         }else{
             fab_atividade.setEnabled(false);

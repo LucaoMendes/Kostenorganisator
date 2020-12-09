@@ -75,4 +75,8 @@ public class AtividadeModel {
     public void setCategoriaAtv(CategoriaModel categoriaAtv) {
         this.categoriaAtv = categoriaAtv;
     }
+    @Override
+    public String toString() {
+        return getTituloAtv() +" "+getId()+" " + getIdLista();
+    }
 }
