@@ -18,6 +18,9 @@ public class CategoriaModel {
         IconeCategoria = iconeCategoria;
     }
 
+    public CategoriaModel() {
+    }
+
     public String getIdCategoria() {
         return idCategoria;
     }

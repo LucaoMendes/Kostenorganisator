@@ -74,24 +74,7 @@ public class ConstructorFragment extends Fragment {
 
             ArrayList<AtividadeModel> atividades = new ArrayList<>();
 
-            atividades.add(new AtividadeModel("Almoço",55.f,"22/04", ConfigDB.alimentacao));
-            atividades.add(new AtividadeModel("Uber",21.f,"22/04", ConfigDB.mobilidade));
-            atividades.add(new AtividadeModel("Shopping",500.f,"22/04", ConfigDB.compras));
-            atividades.add(new AtividadeModel("Almoço",210.f,"22/04", ConfigDB.alimentacao));
-            atividades.add(new AtividadeModel("Shopping",500.f,"22/04", ConfigDB.compras));
-            atividades.add(new AtividadeModel("Shopping",500.f,"22/04", ConfigDB.compras));
-            atividades.add(new AtividadeModel("Uber",21.f,"22/04", ConfigDB.mobilidade));
-            atividades.add(new AtividadeModel("Uber",21.f,"22/04", ConfigDB.mobilidade));
-            atividades.add(new AtividadeModel("Uber",21.f,"22/04", ConfigDB.mobilidade));
-            atividades.add(new AtividadeModel("Almoço",55.f,"22/04", ConfigDB.alimentacao));
-            atividades.add(new AtividadeModel("Uber",21.f,"22/04", ConfigDB.mobilidade));
-            atividades.add(new AtividadeModel("Shopping",500.f,"22/04", ConfigDB.compras));
-            atividades.add(new AtividadeModel("Almoço",210.f,"22/04", ConfigDB.alimentacao));
-            atividades.add(new AtividadeModel("Shopping",500.f,"22/04", ConfigDB.compras));
-            atividades.add(new AtividadeModel("Shopping",500.f,"22/04", ConfigDB.compras));
-            atividades.add(new AtividadeModel("Uber",21.f,"22/04", ConfigDB.mobilidade));
-            atividades.add(new AtividadeModel("Uber",21.f,"22/04", ConfigDB.mobilidade));
-            atividades.add(new AtividadeModel("Uber",21.f,"22/04", ConfigDB.mobilidade));
+
             ListaRecyclerAdapter adapter = new ListaRecyclerAdapter(atividades);
             recyclerView.setAdapter(adapter);
         }
