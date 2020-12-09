@@ -20,11 +20,10 @@ import java.util.List;
 
 public class CardFragment extends RecyclerView.ViewHolder{
     public TextView txt_titulo;
-    public MaterialButton btn_01,btn_02;
     public PieChart chart;
     public CardFragment(@NonNull View itemView) {
         super(itemView);
-        txt_titulo = itemView.findViewById(R.id.txt_titulo);
+        txt_titulo = itemView.findViewById(R.id.txt_tituloCartao);
         chart = itemView.findViewById(R.id.chart);
         float itensGrafico[] = {5.0f,25f,15.0f};
         String descricao[] = {"Item 1", "Item 2", "Item 3"};
@@ -41,6 +40,7 @@ public class CardFragment extends RecyclerView.ViewHolder{
         PieData pieData = new PieData(dataSet);
         Description desc = chart.getDescription();
         desc.setEnabled(false);
+
 
 
         chart.setDrawHoleEnabled(false);

@@ -10,12 +10,12 @@ import java.util.ArrayList;
 
 import br.com.mendes.kostenorganisator.R;
 import br.com.mendes.kostenorganisator.fragments.CardFragment;
-import br.com.mendes.kostenorganisator.models.Card;
+import br.com.mendes.kostenorganisator.models.CardModel;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<CardFragment> {
-    private ArrayList<Card> cartoes;
+public class ResumoRecyclerAdapter extends RecyclerView.Adapter<CardFragment> {
+    private ArrayList<CardModel> cartoes;
 
-    public RecyclerAdapter(ArrayList<Card> cartoes) {
+    public ResumoRecyclerAdapter(ArrayList<CardModel> cartoes) {
         this.cartoes = cartoes;
     }
 

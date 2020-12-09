@@ -1,29 +1,32 @@
 package br.com.mendes.kostenorganisator.models;
 
-public class Atividades {
-    private int id;
+public class AtividadeModel {
+    private String id;
     private String tituloAtv;
     private Float valorAtv;
     private String dataAtv;
+    private CategoriaModel categoriaAtv;
 
-    public Atividades(String tituloAtv, Float valorAtv, String dataAtv) {
-        this.tituloAtv = tituloAtv;
-        this.valorAtv = valorAtv;
-        this.dataAtv = dataAtv;
-    }
-
-    public Atividades(int id, String tituloAtv, Float valorAtv, String dataAtv) {
+    public AtividadeModel(String id, String tituloAtv, Float valorAtv, String dataAtv, CategoriaModel categoriaAtv) {
         this.id = id;
         this.tituloAtv = tituloAtv;
         this.valorAtv = valorAtv;
         this.dataAtv = dataAtv;
+        this.categoriaAtv = categoriaAtv;
     }
 
-    public int getId() {
+    public AtividadeModel(String tituloAtv, Float valorAtv, String dataAtv, CategoriaModel categoriaAtv) {
+        this.tituloAtv = tituloAtv;
+        this.valorAtv = valorAtv;
+        this.dataAtv = dataAtv;
+        this.categoriaAtv = categoriaAtv;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -49,5 +52,13 @@ public class Atividades {
 
     public void setDataAtv(String dataAtv) {
         this.dataAtv = dataAtv;
+    }
+
+    public CategoriaModel getCategoriaAtv() {
+        return categoriaAtv;
+    }
+
+    public void setCategoriaAtv(CategoriaModel categoriaAtv) {
+        this.categoriaAtv = categoriaAtv;
     }
 }

@@ -8,18 +8,18 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.mendes.kostenorganisator.fragments.ListasFragment;
+import br.com.mendes.kostenorganisator.fragments.ConstructorFragment;
 
 public class TabsAdapter extends FragmentPagerAdapter  {
 
-    private List<ListasFragment> listFragments = new ArrayList<>();
+    private List<ConstructorFragment> listFragments = new ArrayList<>();
     private List<String> listFragmentsTitle =  new ArrayList<>();
 
     public TabsAdapter(@NonNull FragmentManager fm, int behavior) {
         super(fm, behavior);
     }
 
-    public void add(ListasFragment frag, String title){
+    public void add(ConstructorFragment frag, String title){
         this.listFragments.add(frag);
         this.listFragmentsTitle.add(title);
     }

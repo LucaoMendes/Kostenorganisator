@@ -18,7 +18,9 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
+                app:layout_constraintTop_toBottomOf="@+id/tabLayout" >
+
+            </androidx.viewpager.widget.ViewPager>
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
@@ -46,6 +48,19 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fab_lista"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="90dp"
+        android:elegantTextHeight="true"
+        android:text="Adicionar Lista"
+        android:visibility="invisible"
+        app:icon="@drawable/add" />
+
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/menuBottomShow"
         style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
@@ -59,12 +74,12 @@
         app:navigationContentDescription="Menu"
         app:navigationIcon="@drawable/menu" />
 
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
 
-        android:id="@+id/fabInserir"
+        android:id="@+id/fab_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/add"
         app:layout_anchor="@id/menuBottomShow" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

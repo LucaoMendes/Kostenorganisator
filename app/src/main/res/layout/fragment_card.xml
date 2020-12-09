@@ -24,7 +24,7 @@
 
             <!-- Title, secondary and supporting text -->
             <TextView
-                android:id="@+id/txt_titulo"
+                android:id="@+id/txt_tituloCartao"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Titulo do Cartão"
