@@ -3,50 +3,37 @@ package br.com.mendes.kostenorganisator.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-
 import br.com.mendes.kostenorganisator.DAO.AtividadesDAO;
 import br.com.mendes.kostenorganisator.DAO.ListasDAO;
 import br.com.mendes.kostenorganisator.R;
 import br.com.mendes.kostenorganisator.adapters.TabsAdapter;
 import br.com.mendes.kostenorganisator.config.ConfigDB;
-import br.com.mendes.kostenorganisator.fragments.ConstructorFragment;
 import br.com.mendes.kostenorganisator.models.AtividadeModel;
 import br.com.mendes.kostenorganisator.models.CategoriaModel;
 import br.com.mendes.kostenorganisator.models.ListaModel;
 import br.com.mendes.kostenorganisator.models.Utils;
+import io.realm.Realm;
 
 public class MainActivity extends AppCompatActivity {
     private FloatingActionButton fab;
@@ -57,18 +44,27 @@ public class MainActivity extends AppCompatActivity {
     private Button btn_fecharAtv,btn_fecharList,btn_salvarLista,btn_salvarAtividade;
     private EditText tituloLista,tituloAtividade,valorAtividade;
     private List<ListaModel> listas;
-    private TabsAdapter adapter;
     private ViewPager viewPager;
     private TabLayout tabLayout;
-    private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReference;
     private ListasDAO listasDAO = new ListasDAO();
     private AtividadesDAO atividadesDAO = new AtividadesDAO();
     private boolean resumoOpen;
+    //Realm realm;
+
+    //TODO: Preciso rever todo o código estrutural do projeto e ver onde estou errando, projeto está MAL ESTRUTURADO!
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //realm = Realm.getDefaultInstance();
+
+
+        /**
+         * Inicialização de Variavéis
+         */
 
         listas = new ArrayList<>();
 
@@ -88,8 +84,8 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewPager);
         tabLayout = findViewById(R.id.tabLayout);
 
-        hiddenPanelLista = (ViewGroup)findViewById(R.id.hidden_panel_lista);
-        hiddenPanelAtv = (ViewGroup)findViewById(R.id.hidden_panel_atividade);
+        hiddenPanelLista = findViewById(R.id.hidden_panel_lista);
+        hiddenPanelAtv = findViewById(R.id.hidden_panel_atividade);
 
 
         isPanelShown = false;
@@ -104,6 +100,10 @@ public class MainActivity extends AppCompatActivity {
         fab_lista.setExtended(false);
         fab_atividade.setExtended(false);
 
+
+        /**
+         * OnClickListeners
+         */
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,37 +161,47 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<CategoriaModel> entries = new ArrayList<>();
         categoriaDropDown = findViewById(R.id.spinner_categ);
-
-
-        //Criação de abas
-
-
-
-
-        /*
-        * Spinner spinner = (Spinner) findViewById(R.id.spinner_categorias);
-// Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.planets_array, android.R.layout.simple_spinner_item);
-// Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
-        * */
-
-
-
-
     }
-
 
 
     @Override
     protected void onStart() {
 
-        listasDAO.obterListas(getSupportFragmentManager(),viewPager,tabLayout);
+
+        /**
+         * Esse Código tá certo?
+         */
+
+        /*
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(ConfigDB.LISTASTABLE);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                listasDAO.obterListas(getSupportFragmentManager(),viewPager,tabLayout);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+         */
+
+
+        // TODO:Verificar todo esse código de obtenção de conteúdo.
+        // TODO:Esse código tem que ficar de forma limpa, tá muito confuso
+        // TODO:Tem que ver uma forma de atualizar a RecyclerView e as Abas de forma Otimizada.
+
         atividadesDAO.obterAtividades();
 
+
+        /**
+         * Ao fazer a troca de páginas ele verifica se está em uma lista ou em um resumo.
+         * Se estiver em uma lista, está habilitado para adicionar uma nova atividade, se não, não
+         * Fecha também se estiver algum formulario aberto.
+         */
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -217,12 +227,15 @@ public class MainActivity extends AppCompatActivity {
             public void onPageScrollStateChanged(int state) {
 
             }
+
         });
-        atividadesDAO.obterAtividades();
         super.onStart();
     }
 
     private void addAtividade(View v) {
+        //TODO: Rever todo o codigo de busca e envio de informações ao servidor FIREBASE
+
+
         String titulo = tituloAtividade.getText().toString();
         int indexLista = viewPager.getCurrentItem()-1;
         String idLista = ListasDAO.DataCache.get(indexLista).getIdLista();
@@ -246,6 +259,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void addLista(View v){
+        //TODO: Rever todo o codigo de busca e envio de informações ao servidor FIREBASE
+
         String titulo = tituloLista.getText().toString();
 
         ListaModel listaNew = new ListaModel(titulo);
@@ -254,6 +269,8 @@ public class MainActivity extends AppCompatActivity {
         Utils.show(v,"Lista adicionada com sucesso");
     }
     public void slideUpDown(ViewGroup v) {
+        //TODO: Criar uma variavel para cada formulario e enviar essa função ao UTILS
+
         hiddenPanel = v;
         if(!isPanelShown) {
             // Show the panel
@@ -276,6 +293,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     public void DownAll(ViewGroup v, ViewGroup v1){
+        //TODO: Remover essa função e fazer ela funcionar na SlideUpDown
+
+
         Animation bottomDown = AnimationUtils.loadAnimation(this,
                 R.anim.bottom_down);
         fab.show();
@@ -292,6 +312,8 @@ public class MainActivity extends AppCompatActivity {
         isPanelShown = false;
     }
     public void animarFabs(){
+        //TODO: Essa função deveria estar em UTILS
+
         //Animação das fabs
 
         //Inicializando variaveis
@@ -331,6 +353,9 @@ public class MainActivity extends AppCompatActivity {
         extendOrShrinkFabs(fab_lista);
     }
     public void extendOrShrinkFabs(final ExtendedFloatingActionButton fab){
+        //TODO:Essa função deveria estar em Utils
+
+
         if(!fab.isExtended()){
             fab.setVisibility(View.VISIBLE);
             fab.setAlpha(0f);

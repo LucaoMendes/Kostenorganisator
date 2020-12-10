@@ -18,10 +18,16 @@ import br.com.mendes.kostenorganisator.models.AtividadeModel;
 import br.com.mendes.kostenorganisator.models.ListaModel;
 
 public class AtividadesDAO {
+    /**
+     * Instanciando variaveis
+     * TODO: Deveria criar um databaseReference no Utils para cada uma das utilizações
+     * TODO: Rever todo o codigo de busca e envio de informações ao servidor FIREBASE
+     */
     private DatabaseReference databaseReference;
     public static List<AtividadeModel> DataCache =new ArrayList<>();
 
     public boolean Create(AtividadeModel atv){
+        //Criação de Atividades
         databaseReference = FirebaseDatabase.getInstance().getReference(ConfigDB.ATIVIDADESTABLE);
         String id = databaseReference.push().getKey();
         atv.setId(id);

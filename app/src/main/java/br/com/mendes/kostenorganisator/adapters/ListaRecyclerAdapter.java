@@ -18,8 +18,17 @@ import br.com.mendes.kostenorganisator.models.AtividadeModel;
 import br.com.mendes.kostenorganisator.models.CardModel;
 
 public class ListaRecyclerAdapter extends RecyclerView.Adapter<AtividadeFragment> {
+
+    /**
+     * Instanciando variaveis...
+     * TODO: Ver como irei fazer para a recyclerView atualizar junto com as informações adicionadas
+     */
     private ArrayList<AtividadeModel> atividades;
 
+    /**
+     * Constructor
+     * @param atividades
+     */
     public ListaRecyclerAdapter(ArrayList<AtividadeModel> atividades) {
         this.atividades = atividades;
     }
@@ -34,9 +43,9 @@ public class ListaRecyclerAdapter extends RecyclerView.Adapter<AtividadeFragment
     public void onBindViewHolder(@NonNull AtividadeFragment holder, int position) {
 
         //Pega as informações na posição position e coloca nos objetos dentro do viewHolder
-
+        String valorAtividade = "R$ "+Float.toString(atividades.get(position).getValorAtv()).replace(".",",");
         holder.txt_tituloAtividade.setText(atividades.get(position).getTituloAtv());
-        holder.txt_valorAtividade.setText("R$ "+Float.toString(atividades.get(position).getValorAtv()).replace(".",","));
+        holder.txt_valorAtividade.setText(valorAtividade);
         holder.txt_dataAtvidade.setText(atividades.get(position).getDataAtv());
         holder.chip_categoria.setText(atividades.get(position).getCategoriaAtv().getNomeCategoria());
         holder.chip_categoria.setChipIconResource(atividades.get(position).getCategoriaAtv().getIconeCategoria());
@@ -48,6 +57,7 @@ public class ListaRecyclerAdapter extends RecyclerView.Adapter<AtividadeFragment
             @Override
             public void onClick(View v) {
                 //BTN EDITAR
+                //TODO: Botão de editar atividade (Acredito que seja mais facil se não for um ViewGroup e sim uma activity)
             }
         });
 
@@ -55,6 +65,7 @@ public class ListaRecyclerAdapter extends RecyclerView.Adapter<AtividadeFragment
             @Override
             public void onClick(View v) {
                 //BTN APAGAR
+                //TODO:Botão Apagar Atividade
             }
         });
 

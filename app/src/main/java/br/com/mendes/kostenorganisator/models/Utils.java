@@ -36,7 +36,7 @@ public class Utils {
     }
 
     public static void criarAbas(FragmentManager fm, ViewPager viewPager, TabLayout tabLayout) {
-
+        //TODO: Verificar uma forma de atualizar as abas sem apagar tudo e criar denovo
         TabsAdapter adapter = new TabsAdapter(fm,1);
         adapter.add(ConstructorFragment.newInstance(true,null),"Resumo");
 
@@ -48,6 +48,7 @@ public class Utils {
     }
 
     public static void fecharTeclado(Activity a){
+        //TODO: Teclado está abrindo com essa função
         InputMethodManager imm = (InputMethodManager) a.getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }

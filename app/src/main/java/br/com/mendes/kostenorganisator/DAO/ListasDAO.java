@@ -27,6 +27,11 @@ import br.com.mendes.kostenorganisator.models.ListaModel;
 import br.com.mendes.kostenorganisator.models.Utils;
 
 public class ListasDAO {
+    /**
+     * Instanciando variaveis
+     * TODO: Deveria criar um databaseReference no Utils para cada uma das utilizações
+     * TODO: Rever todo o codigo de busca e envio de informações ao servidor FIREBASE
+     */
     private DatabaseReference databaseReference;
     public static List<ListaModel> DataCache =new ArrayList<>();
 

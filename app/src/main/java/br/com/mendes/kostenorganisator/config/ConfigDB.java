@@ -4,6 +4,8 @@ import br.com.mendes.kostenorganisator.R;
 import br.com.mendes.kostenorganisator.models.CategoriaModel;
 
 public interface ConfigDB {
+    //TODO: isso aqui não era pra estar no Utils?
+
     public final String DBNAME = "kostenorganisator";
     public final String ATIVIDADESTABLE = "atividades";
     public final String LISTASTABLE = "listas";

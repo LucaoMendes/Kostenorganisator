@@ -7,6 +7,7 @@ import android.os.Bundle;
 import br.com.mendes.kostenorganisator.R;
 
 public class InserirListaActivity extends AppCompatActivity {
+    //TODO: Remover essa atividade ou remover a viewGroup?
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

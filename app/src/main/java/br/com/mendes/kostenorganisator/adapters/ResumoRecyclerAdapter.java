@@ -27,6 +27,7 @@ public class ResumoRecyclerAdapter extends RecyclerView.Adapter<CardFragment> {
 
     @Override
     public void onBindViewHolder(@NonNull CardFragment holder, int position) {
+        //TODO: ver Calculo e como fazer os graficos
         holder.txt_titulo.setText(cartoes.get(position).getTitulo());
 
 
