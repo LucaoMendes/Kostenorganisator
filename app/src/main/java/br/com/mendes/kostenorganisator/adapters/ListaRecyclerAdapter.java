@@ -10,12 +10,14 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import br.com.mendes.kostenorganisator.R;
 import br.com.mendes.kostenorganisator.fragments.AtividadeFragment;
 import br.com.mendes.kostenorganisator.fragments.CardFragment;
 import br.com.mendes.kostenorganisator.models.AtividadeModel;
 import br.com.mendes.kostenorganisator.models.CardModel;
+import br.com.mendes.kostenorganisator.realm.models.AtividadeModelR;
 
 public class ListaRecyclerAdapter extends RecyclerView.Adapter<AtividadeFragment> {
 
@@ -23,13 +25,13 @@ public class ListaRecyclerAdapter extends RecyclerView.Adapter<AtividadeFragment
      * Instanciando variaveis...
      * TODO: Ver como irei fazer para a recyclerView atualizar junto com as informações adicionadas
      */
-    private ArrayList<AtividadeModel> atividades;
+    private List<AtividadeModelR> atividades;
 
     /**
      * Constructor
      * @param atividades
      */
-    public ListaRecyclerAdapter(ArrayList<AtividadeModel> atividades) {
+    public ListaRecyclerAdapter(List<AtividadeModelR> atividades) {
         this.atividades = atividades;
     }
 

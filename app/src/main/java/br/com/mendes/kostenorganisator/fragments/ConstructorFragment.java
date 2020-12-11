@@ -21,8 +21,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import br.com.mendes.kostenorganisator.DAO.AtividadesDAO;
+import br.com.mendes.kostenorganisator.DAO.ListasDAO;
 import br.com.mendes.kostenorganisator.R;
 import br.com.mendes.kostenorganisator.adapters.ListaRecyclerAdapter;
 import br.com.mendes.kostenorganisator.adapters.ResumoRecyclerAdapter;
@@ -30,6 +32,8 @@ import br.com.mendes.kostenorganisator.config.ConfigDB;
 import br.com.mendes.kostenorganisator.models.AtividadeModel;
 import br.com.mendes.kostenorganisator.models.CardModel;
 import br.com.mendes.kostenorganisator.models.ListaModel;
+import br.com.mendes.kostenorganisator.realm.models.AtividadeModelR;
+import br.com.mendes.kostenorganisator.realm.models.ListaModelR;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,6 +44,10 @@ public class ConstructorFragment extends Fragment {
 
     private String nomeLista;
     private String idLista;
+    private long idListaR;
+
+    private static List<ListaModelR> listasR = new ArrayList<>();
+    private ListaModel lista;
     private boolean resumo;
     private RecyclerView recyclerView;
     private FloatingActionButton fab;
@@ -60,14 +68,35 @@ public class ConstructorFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Passando lista do REALMS
+     * @param b
+     * @param lista
+     * @return
+     */
+    public static ConstructorFragment newInstance(Boolean b, ListaModelR lista) {
+        ConstructorFragment fragment = new ConstructorFragment();
+        Bundle args = new Bundle();
+        args.putBoolean("resumo",b);
+        if(lista != null){
+            args.putString("nomeLista",lista.getNomeLista());
+            args.putString("idLista",lista.getKey());
+            args.putLong("idListaR",lista.getIdLista());
+            listasR.add(lista);
+        }
+
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             resumo = getArguments().getBoolean("resumo");
             if(!resumo){
-                nomeLista = getArguments().getString("nomeLista");
-                idLista = getArguments().getString("idLista");
+                idListaR = getArguments().getLong("idListaR");
+
             }
 
 
@@ -91,17 +120,19 @@ public class ConstructorFragment extends Fragment {
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setHasFixedSize(true);
 
-            ArrayList<AtividadeModel> atividades = new ArrayList<>();
+            List<AtividadeModelR> atividades;
             //Atividades
+            //TODO: REVISTO A FORMA DE FILTRO
+            //TODO: Rever a forma de Filtro
+//            for(AtividadeModel atv : AtividadesDAO.DataCache){
+//                if(atv.getIdLista().equals(idLista)){
+//                    atividades.add(atv);
+//                }
+//            }
 
-
-            for(AtividadeModel atv : AtividadesDAO.DataCache){
-                Log.v("DEBUG INFO ATIVDI Cstr","IDLISTA: " +idLista +" IDLISTA AT "+ atv.getIdLista() );
-                if(atv.getIdLista().equals(idLista)){
-                    atividades.add(atv);
-                }
-            }
-
+            AtividadesDAO atividadesDAO = new AtividadesDAO();
+            atividades = atividadesDAO.buscarAtividadesDaLista(listasR.get((int)idListaR -1));
+            Log.v("DEBUG LISTA CONS","ID LISTA: "+ idListaR);
             ListaRecyclerAdapter adapter = new ListaRecyclerAdapter(atividades);
             recyclerView.setAdapter(adapter);
         }

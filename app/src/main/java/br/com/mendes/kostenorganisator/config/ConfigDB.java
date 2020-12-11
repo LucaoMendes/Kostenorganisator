@@ -2,6 +2,7 @@ package br.com.mendes.kostenorganisator.config;
 
 import br.com.mendes.kostenorganisator.R;
 import br.com.mendes.kostenorganisator.models.CategoriaModel;
+import br.com.mendes.kostenorganisator.realm.models.CategoriaModelR;
 
 public interface ConfigDB {
     //TODO: isso aqui não era pra estar no Utils?
@@ -19,7 +20,7 @@ public interface ConfigDB {
 
     //Categorias
 
-    public CategoriaModel alimentacao = new CategoriaModel("Alimentação", R.color.red,R.drawable.alimentacao);
-    public CategoriaModel mobilidade = new CategoriaModel("Mobilidade",R.color.cinza,R.drawable.mobilidade);
-    public CategoriaModel compras = new CategoriaModel("Compras",R.color.blue,R.drawable.compras);
+    public CategoriaModelR alimentacao = new CategoriaModelR(1,"Alimentação", R.color.red,R.drawable.alimentacao);
+    public CategoriaModelR mobilidade = new CategoriaModelR(2,"Mobilidade",R.color.cinza,R.drawable.mobilidade);
+    public CategoriaModelR compras = new CategoriaModelR(3,"Compras",R.color.blue,R.drawable.compras);
 }

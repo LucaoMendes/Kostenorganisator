@@ -77,6 +77,6 @@ public class AtividadeModel {
     }
     @Override
     public String toString() {
-        return getTituloAtv() +" "+getId()+" " + getIdLista();
+        return getTituloAtv();
     }
 }

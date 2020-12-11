@@ -33,7 +33,12 @@ import br.com.mendes.kostenorganisator.models.AtividadeModel;
 import br.com.mendes.kostenorganisator.models.CategoriaModel;
 import br.com.mendes.kostenorganisator.models.ListaModel;
 import br.com.mendes.kostenorganisator.models.Utils;
+import br.com.mendes.kostenorganisator.realm.models.AtividadeModelR;
+import br.com.mendes.kostenorganisator.realm.models.CategoriaModelR;
+import br.com.mendes.kostenorganisator.realm.models.ListaModelR;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity {
     private FloatingActionButton fab;
@@ -49,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private ListasDAO listasDAO = new ListasDAO();
     private AtividadesDAO atividadesDAO = new AtividadesDAO();
     private boolean resumoOpen;
-    //Realm realm;
+    Realm realm;
 
     //TODO: Preciso rever todo o código estrutural do projeto e ver onde estou errando, projeto está MAL ESTRUTURADO!
 
@@ -58,8 +63,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //realm = Realm.getDefaultInstance();
 
 
         /**
@@ -163,7 +166,6 @@ public class MainActivity extends AppCompatActivity {
         categoriaDropDown = findViewById(R.id.spinner_categ);
     }
 
-
     @Override
     protected void onStart() {
 
@@ -171,7 +173,10 @@ public class MainActivity extends AppCompatActivity {
         /**
          * Esse Código tá certo?
          */
-
+        /**
+         * Código de obter Listas FIREBASE
+         * Mesmo que não tenha nenhuma lista é OBRIGATORIO CRIAR a aba resumo
+         */
         /*
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(ConfigDB.LISTASTABLE);
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -185,16 +190,23 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-
          */
+
+
 
 
         // TODO:Verificar todo esse código de obtenção de conteúdo.
         // TODO:Esse código tem que ficar de forma limpa, tá muito confuso
         // TODO:Tem que ver uma forma de atualizar a RecyclerView e as Abas de forma Otimizada.
 
+
+        /**
+         * Código de obter Atividades do FIREBASE
+         */
+        /*
         atividadesDAO.obterAtividades();
+         */
+
 
 
         /**
@@ -230,18 +242,27 @@ public class MainActivity extends AppCompatActivity {
 
         });
         super.onStart();
+
+        /**
+         * Inicializar operações do app,
+         * Criação de abas
+         * Criação de listeners
+         */
+        Utils.iniciarApp(getSupportFragmentManager(),viewPager,tabLayout);
+        realm = Realm.getDefaultInstance();
     }
 
+
+//Códigos de Adicionar DO FIREBASE!!!
     private void addAtividade(View v) {
         //TODO: Rever todo o codigo de busca e envio de informações ao servidor FIREBASE
 
 
         String titulo = tituloAtividade.getText().toString();
-        int indexLista = viewPager.getCurrentItem()-1;
-        String idLista = ListasDAO.DataCache.get(indexLista).getIdLista();
+        long idLista = viewPager.getCurrentItem();
         float valor = Float.parseFloat(valorAtividade.getText().toString());
         String categoria = categoriaDropDown.getSelectedItem().toString();
-        CategoriaModel categ;
+        CategoriaModelR categ;
         switch (categoria){
             case "Alimentação":
                 categ = ConfigDB.alimentacao;
@@ -254,8 +275,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
 
-        AtividadeModel newAtividade = new AtividadeModel(idLista,titulo, "09/12",valor,categ);
-        atividadesDAO.Create(newAtividade);
+        AtividadeModelR newAtividade = new AtividadeModelR(idLista,titulo, "09/12",valor,categ);
+        // FIREBASE COMMAND
+        // atividadesDAO.Create(newAtividade);
+        atividadesDAO.inserirAtividade(newAtividade);
 
     }
     public void addLista(View v){
@@ -263,8 +286,8 @@ public class MainActivity extends AppCompatActivity {
 
         String titulo = tituloLista.getText().toString();
 
-        ListaModel listaNew = new ListaModel(titulo);
-        listaNew = new ListasDAO().create(listaNew);
+        ListaModelR listaNew = new ListaModelR(titulo);
+        listasDAO.inserirLista(listaNew);
         slideUpDown(hiddenPanelLista);
         Utils.show(v,"Lista adicionada com sucesso");
     }
